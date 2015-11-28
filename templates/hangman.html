@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Hangman</title>
+		<link rel="stylesheet" href="../static/styles/default.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+		<link rel="stylesheet" href="../static/styles/hangman.css">
+		<script>
+		var word= '{{session['word']}}';
+		</script>
+	</head>
+	<body>
+		<header>
+			<div>M</div>
+			<div>Michigan Hangman</div>
+			<span>{{session['player_name']}}</span>
+			<span>Score : </span><span id="score">{{ session['player_score'] }}</span>
+		</header>
+		<section>
+			<div id="hint">This keeps doctor away!</div>
+			<div id="deadman">
+				hangman picture
+			</div>
+			<div id="ans">
+			</div>
+			<div id="alpha-container">
+			</div>
+		</section>
+  </body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../static/scripts/hangman.js"></script>
+</html>
