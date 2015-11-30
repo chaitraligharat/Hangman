@@ -13,6 +13,7 @@ var gameStatus = word.length;
 var main = function() {
   populateBlanks();
   populateAlphabets();
+  $('#hint').text(hint);
 }
 
 function populateAlphabets()
@@ -57,8 +58,6 @@ function checkAlpha(alphabet){
 
   while (index != -1)
   {
-    console.log($('#blank'+index));
-
     //word contains the letter. Change the innerHTML of the blank to letter.
     $('#blank'+index).text(letter);
 
@@ -80,7 +79,6 @@ function updateProgress(found)
   if(gameStatus == 0)
   {
     $('#deadman').text("You Won!!!!");
-    console.log("You won!");
     //game won code;
     gameWon();
   }
@@ -88,9 +86,22 @@ function updateProgress(found)
 
 function gameWon()
 {
-  var score = parseInt($('#score').text()) + 1;
-  $('#score').text(score);
-}
+  console.log("Game won!!");
+  $.getJSON($SCRIPT_ROOT + '/won', {
+        word: 'ABC'
+      },
+      function(data) {
+        //$("#result").text(data.result);
+        console.log(data.status);
+        console.log("Got response");
+        if(data.status == 1)
+        {
+          $('#start-new-game').show();
+          alert("This should work!");
+        }
+      });
+      return false;
+    }
 
 function hangman()
 {
@@ -98,9 +109,21 @@ function hangman()
   //if the status is right leg, the game is lost
   if (deadStatus == RIGHT_LEG)
   {
+    $('#deadman').text("You Lost!!!!");
     console.log("You lost!!!");
     //code for game lost
+    gameLost();
   }
+}
+
+function gameLost()
+{
+  disableAllAlphabets();
+}
+
+function disableAllAlphabets()
+{
+  $('.alphabet').addClass("disabled");
 }
 
 function drawNext(deadStatus)

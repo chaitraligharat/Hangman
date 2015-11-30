@@ -5,3 +5,7 @@
   text-decoration:none;
   text-decoration: line-through;
 }
+
+#start-new-game {
+  display : none;
+}

@@ -7,7 +7,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
 		<script>
-		var word= '{{session['word']}}';
+		var word= '{{word}}';
+		var hint= '{{hint}}';
+		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 		</script>
 	</head>
 	<body>
@@ -18,7 +20,8 @@
 			<span>Score : </span><span id="score">{{ session['player_score'] }}</span>
 		</header>
 		<section>
-			<div id="hint">This keeps doctor away!</div>
+			<div id="logout"><a href="/logout">Logout</a></div>
+			<div id="hint"></div>
 			<div id="deadman">
 				hangman picture
 			</div>
@@ -26,6 +29,7 @@
 			</div>
 			<div id="alpha-container">
 			</div>
+			<div id="start-new-game"><a href="/hangman">Start a new  game</a></div>
 		</section>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
