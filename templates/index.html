@@ -6,25 +6,71 @@
 		<link rel="stylesheet" href="../static/styles/default.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
+
+		<style type="text/css">
+			body{
+				background-image: url('../static/images/background_image.png');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+			}
+			.container{
+				text-align: center;
+			}
+			input{
+				border: 1px solid #ffd215;
+				background-color: transparent;
+				margin-top: 1%;
+				margin-bottom: 1%;
+				color: white;
+				font-size: 16px;
+				font-family: 'Helvetica', 'Arial', sans-serif;
+			}
+
+			form label{
+				color: white;
+				font-size: 18px;
+				font-family: 'Helvetica', 'Arial', sans-serif;
+			}
+			header{
+
+				margin-bottom: 10%;
+				text-align: center;
+			}
+			h1{
+				font-size: 100px;
+				font-family: 'Helvetica', 'Arial', sans-serif;
+				color: #ffd215;
+			}
+			#submit{
+				color: #00274c;
+				background-color: #ffd215;
+				border: none;
+				padding: 0.5%;
+			}
+		</style>
 	</head>
 	<body>
 		<header>
-			<div>M</div>
-			<div>Michigan Hangman</div>
+			<h1>hangMan</h1>
 		</header>
-		<section>
+		<div class="container">
 			<form action="/submitCheckin" method="POST">
-				<div>
-					<label>Unique Name</label>
-				</div>
-				<div id="loginid">
+				<ul>
+				<li>
 					{{ form.username.label }}
-    			{{ form.username }}
-				</div>
-				{{ form.submit }}
+				</li>
+				<li id="loginid">
+					{{ form.username }}
+				</li>
+				<li>{{ form.submit }}</li>
+				</ul>
 			</form>
-		</section>
+		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../static/scripts/hangman.js"></script>
+	<!-- <script src="../static/scripts/hangman.js"></script> -->
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, escape, request
+from flask import Flask, render_template, session, redirect, url_for, escape, request, jsonify
 from core import Player, Game
 from forms import LoginForm
 app = Flask(__name__)		#Initialize application
@@ -26,13 +26,6 @@ def submitCheckin():
         return redirect(url_for('hangman'))
     return redirect(url_for('index',error=errormsg))
 
-@app.route('/won')
-def won():
-    score = session['player_score']
-    score = score + 1
-    session['player_score'] = score
-    return redirect(url_for('hangman'))
-
 @app.route('/lost')
 def lost():
     return redirect(url_for('hangman'))
@@ -50,16 +43,24 @@ def hangman():
 def logout():
     session.pop('player_name', None)
     session.pop('player_score', None)
-    session.pop('word', None)
     return redirect(url_for('index'))
 
 @app.route('/won')
 def gameWon():
-    print "==============Game won=================="
-    # a = request.args.get('word', 'none', type=str)
-    score = session['player_score'] + 1;
+    print "won"
+    score = session['player_score'] + 1
     session['player_score'] = score
-    return jsonify(status=1)
+    game = Game()
+    theme = game.getRandomTheme()
+    hint = game.getHint(theme)
+    word = game.getWord(theme)
+    return jsonify(hint=hint, word=word, score=score)
+
+@app.route('/gameEnd')
+def gameEnd():
+    score = session['player_score']
+    session['player_score'] = 0
+    return render_template('gameEnd.html',score=score)
 
 # @app.route('/lost')
 # def gameLost():

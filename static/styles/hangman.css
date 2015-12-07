@@ -3,7 +3,12 @@
   cursor: default;
   color: grey;
   text-decoration:none;
-  text-decoration: line-through;
+}
+
+.alphabet{
+  color: white;
+  background-color: blue;
+  padding: 1%;
 }
 
 #start-new-game {

@@ -7,18 +7,114 @@ var LEFT_LEG = 5;
 var RIGHT_LEG = 6;
 
 var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-var deadStatus = NONE;
-var gameStatus = word.length;
+var deadStatus;
+var gameStatus;
+//
+// var game_timer =
+//   {
+//     timer:null,
+//     time_remaining:2
+//
+//     this.pauseTimer = function() {
+//       clearInterval(timer);
+//       console.log("Will redirect now");
+//     }
+//
+//     this.resetTimer = function() {
+//       time_remaining = 2;
+//     }
+//
+//     displayTimer = function(mm,ss) {
+//       $('#time').text(mm + " : "+ ss);
+//     }
+//
+//     runTimer = function() {
+//       var end = new Date();
+//       end.setMinutes(end.getMinutes() + time_remaining);
+//       var start = new Date();
+//
+//       timer = setInterval(function() {
+//         now = new Date();
+//         time_remaining = end - now;
+//
+//         if(time_remaining <= 0)
+//         {
+//           pauseTimer();
+//           console.log('Game ends');
+//           return;
+//         //  endGame();
+//         }
+//         var msec = time_remaining;
+//         var hh = Math.floor(msec / 1000 / 60 / 60);
+//         msec -= hh * 1000 * 60 * 60;
+//         var mm = Math.floor(msec / 1000 / 60);
+//         msec -= mm * 1000 * 60;
+//         var ss = Math.floor(msec / 1000);
+//         msec -= ss * 1000;
+//         displayTimer(mm,ss);
+//       },1000);
+//     }
+//   };
 
 var main = function() {
+  prepareNewGame();
+  //game_timer.runTimer();
+}
+
+function prepareNewGame()
+{
+  deadStatus = NONE;
+  gameStatus = word.length;
+  $('#deadman').show();
+  $('#status').hide();
+
   populateBlanks();
   populateAlphabets();
   $('#hint').text(hint);
 }
 
+function showDeadMan()
+{
+
+}
+//
+// function startTimer(limit)
+// {
+//     var end = new Date();
+//     end.setMinutes(end.getMinutes() + limit);
+//     var start = new Date();
+//
+//     timer = setInterval(function() {
+//       now = new Date();
+//       diff = end - now;
+//
+//       if(diff <= 0)
+//       {
+//         clearInterval(timer);
+//         console.log("Will redirect now");
+//       //  endGame();
+//       }
+//       var msec = diff;
+//       var hh = Math.floor(msec / 1000 / 60 / 60);
+//       msec -= hh * 1000 * 60 * 60;
+//       var mm = Math.floor(msec / 1000 / 60);
+//       msec -= mm * 1000 * 60;
+//       var ss = Math.floor(msec / 1000);
+//       msec -= ss * 1000;
+//
+//       $('#time').text(mm + " : "+ ss);
+//     },1000);
+// }
+
+function endGame()
+{
+  window.location.replace('/gameEnd');
+}
+
 function populateAlphabets()
 {
-  var alphaContainer = $('#alpha-container')
+  var alphaContainer = $('#alpha-container');
+  alphaContainer.empty();
   for (var i=0; i<alphabet.length; i++)
   {
     var alpha = createAlphabet(alphabet[i]);
@@ -78,7 +174,8 @@ function updateProgress(found)
   gameStatus = gameStatus - found;
   if(gameStatus == 0)
   {
-    $('#deadman').text("You Won!!!!");
+    $('#deadman').hide();
+    $('#status').text("You Won!!!!");
     //game won code;
     gameWon();
   }
@@ -86,22 +183,26 @@ function updateProgress(found)
 
 function gameWon()
 {
-  console.log("Game won!!");
+//  game_timer.pauseTimer();
   $.getJSON($SCRIPT_ROOT + '/won', {
-        word: 'ABC'
+        word: getSolvedWord()
       },
       function(data) {
-        //$("#result").text(data.result);
-        console.log(data.status);
-        console.log("Got response");
-        if(data.status == 1)
-        {
-          $('#start-new-game').show();
-          alert("This should work!");
-        }
+      //  game_timer.runTimer();
+        console.log(data);
+        word = data.word;
+        hint = data.hint;
+        console.log(data.score);
+        $('#score').text(data.score);
+        prepareNewGame();
       });
       return false;
-    }
+}
+
+function getSolvedWord()
+{
+  return 'abc';
+}
 
 function hangman()
 {
@@ -109,8 +210,8 @@ function hangman()
   //if the status is right leg, the game is lost
   if (deadStatus == RIGHT_LEG)
   {
-    $('#deadman').text("You Lost!!!!");
-    console.log("You lost!!!");
+    $('#deadman').hide();
+    $('#status').text("You Lost!!!!");
     //code for game lost
     gameLost();
   }
@@ -128,12 +229,13 @@ function disableAllAlphabets()
 
 function drawNext(deadStatus)
 {
-  console.log("Drawing the next body part" + deadStatus);
-  $('#deadman').text(deadStatus);
+  $('#status').text(deadStatus);
+  $('#status').show();
 }
 
 function populateBlanks()
 {
+  $('#ans').empty();
   for(var i=0;i<word.length;i++)
   {
     var element = $('<span>');

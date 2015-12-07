@@ -6,6 +6,51 @@
 		<link rel="stylesheet" href="../static/styles/default.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
+
+		<style type="text/css">
+		body{
+			background-color: black;
+		}
+		span{
+			color: white;
+			font-family: 'Helvetica', 'Arial', sans-serif;
+			font-weight: bold;
+		}
+		#username, #score{
+			color: #ffd215;
+		}
+		button{
+			background-color: transparent;
+			border: 2px solid #ffd215;
+
+		}
+		a{
+			color: #ffd215;
+		}
+		#details{
+			padding-top: 2%;
+			text-align: center;
+		}
+
+		canvas{
+			  height: 300px;
+			  width: 400px;
+			}
+
+			#gamearea, #deadman{
+				text-align: center;
+				margin-top: 7%;
+			}
+			li{
+				padding-top: 2%;
+				padding-bottom: 2%;
+			}
+			.row{
+				padding-top: 4%;
+				padding-bottom:4%;
+			}
+		</style>
+
 		<script>
 		var word= '{{word}}';
 		var hint= '{{hint}}';
@@ -13,25 +58,78 @@
 		</script>
 	</head>
 	<body>
+
 		<header>
-			<div>M</div>
-			<div>Michigan Hangman</div>
-			<span>{{session['player_name']}}</span>
-			<span>Score : </span><span id="score">{{ session['player_score'] }}</span>
+			<div class="col-lg-9">
+			</div>
+			<div id="details" class="col-lg-3">
+				<ul>
+					<li><span>Username : </span><span id="username">{{session['player_name']}}</span></li>
+					<li><span>Score : </span><span id="score">{{ session['player_score'] }}</span></li>
+					<li><button id="logout"><a href="/logout">Logout</a></span></li>
+				</ul>
+			</div>
 		</header>
-		<section>
-			<div id="logout"><a href="/logout">Logout</a></div>
-			<div id="hint"></div>
-			<div id="deadman">
-				hangman picture
+
+		<div class="container">
+
+			<div class="col-lg-6" id="deadman">
+				<canvas id="stickman"></canvas>
+				<div id="status"></div>
 			</div>
-			<div id="ans">
+
+			<div class="col-lg-6" id="gamearea">
+				<div id="time"></div>
+				<div class="row">
+					<span>Theme : </span><span>{{hint}}</span>
+				</div>
+				<div class="row" id="ans">
+				</div>
+				<div class="row" id="alpha-container">
+				</div>
+				<div class="row" id="start-new-game"><button><a href="/hangman">Start a new  game</a></button></div>
 			</div>
-			<div id="alpha-container">
-			</div>
-			<div id="start-new-game"><a href="/hangman">Start a new  game</a></div>
-		</section>
+
+
+
+		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../static/scripts/hangman.js"></script>
+	<script type="text/javascript">
+
+	var c= document.getElementById("stickman");
+	var s = c.getContext("2d");
+	s.beginPath();
+
+	//Head
+	s.arc(120,50,25,0,2*Math.PI);
+
+	//Torso
+	s.moveTo(120,75);
+	s.lineTo(120,110);
+
+	//Right hand
+	s.moveTo(120,90);
+	s.lineTo(160,70);
+
+	//Left hand
+	s.moveTo(120,90);
+	s.lineTo(80,70);
+
+	//Right leg
+	s.moveTo(120,110);
+	s.lineTo(160,130);
+
+	//Left leg
+	s.moveTo(120,110);
+	s.lineTo(80,130);
+
+	s.lineWidth=5;
+	s.fillStyle = "#ffd215"
+	s.strokeStyle = "#ffd215";
+	s.stroke();
+	s.fill();
+
+	</script>
 </html>
