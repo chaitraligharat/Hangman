@@ -141,6 +141,9 @@ function checkAlpha(alphabet){
     return;
   }
 
+  //disable link
+  $(alphabet).addClass("disabled");
+
   //link is not disabled. Check if the alphabet is present in the word.
   var letter = $(alphabet).text();
 
@@ -149,7 +152,7 @@ function checkAlpha(alphabet){
   var found = 0;
   if(index == -1)
   {
-    hangman();
+    return hangman();
   }
 
   while (index != -1)
@@ -162,9 +165,6 @@ function checkAlpha(alphabet){
 
     found++;
   }
-
-  //disable link
-  $(alphabet).addClass("disabled");
 
   updateProgress(found);
 }
@@ -183,16 +183,18 @@ function updateProgress(found)
 
 function gameWon()
 {
-//  game_timer.pauseTimer();
-  $.getJSON($SCRIPT_ROOT + '/won', {
+  getNewGame('/won')
+}
+
+function getNewGame(url)
+{
+  $.getJSON($SCRIPT_ROOT + url, {
         word: getSolvedWord()
       },
       function(data) {
       //  game_timer.runTimer();
-        console.log(data);
         word = data.word;
         hint = data.hint;
-        console.log(data.score);
         $('#score').text(data.score);
         prepareNewGame();
       });
@@ -213,13 +215,14 @@ function hangman()
     $('#deadman').hide();
     $('#status').text("You Lost!!!!");
     //code for game lost
-    gameLost();
+    return gameLost();
   }
 }
 
 function gameLost()
 {
   disableAllAlphabets();
+  getNewGame('/lost');
 }
 
 function disableAllAlphabets()

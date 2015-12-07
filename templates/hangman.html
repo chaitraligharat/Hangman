@@ -7,54 +7,10 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
 
-		<style type="text/css">
-		body{
-			background-color: black;
-		}
-		span{
-			color: white;
-			font-family: 'Helvetica', 'Arial', sans-serif;
-			font-weight: bold;
-		}
-		#username, #score{
-			color: #ffd215;
-		}
-		button{
-			background-color: transparent;
-			border: 2px solid #ffd215;
-
-		}
-		a{
-			color: #ffd215;
-		}
-		#details{
-			padding-top: 2%;
-			text-align: center;
-		}
-
-		canvas{
-			  height: 300px;
-			  width: 400px;
-			}
-
-			#gamearea, #deadman{
-				text-align: center;
-				margin-top: 7%;
-			}
-			li{
-				padding-top: 2%;
-				padding-bottom: 2%;
-			}
-			.row{
-				padding-top: 4%;
-				padding-bottom:4%;
-			}
-		</style>
-
 		<script>
-		var word= '{{word}}';
-		var hint= '{{hint}}';
-		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			var word= '{{word}}';
+			var hint= '{{hint}}';
+			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 		</script>
 	</head>
 	<body>
@@ -89,9 +45,6 @@
 				</div>
 				<div class="row" id="start-new-game"><button><a href="/hangman">Start a new  game</a></button></div>
 			</div>
-
-
-
 		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

@@ -47,7 +47,6 @@ def logout():
 
 @app.route('/won')
 def gameWon():
-    print "won"
     score = session['player_score'] + 1
     session['player_score'] = score
     game = Game()
@@ -62,9 +61,13 @@ def gameEnd():
     session['player_score'] = 0
     return render_template('gameEnd.html',score=score)
 
-# @app.route('/lost')
-# def gameLost():
-
+@app.route('/lost')
+def gameLost():
+    game = Game()
+    theme = game.getRandomTheme()
+    hint = game.getHint(theme)
+    word = game.getWord(theme)
+    return jsonify(hint=hint, word=word, score=score)
 
 if __name__ == '__main__':	#Start the Development server
     app.run(debug=True)
