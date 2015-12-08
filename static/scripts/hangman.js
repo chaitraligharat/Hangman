@@ -222,7 +222,7 @@ function hangman()
 function gameLost()
 {
   disableAllAlphabets();
-  getNewGame('/lost');
+  return getNewGame('/lost');
 }
 
 function disableAllAlphabets()

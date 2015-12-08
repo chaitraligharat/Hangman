@@ -26,10 +26,6 @@ def submitCheckin():
         return redirect(url_for('hangman'))
     return redirect(url_for('index',error=errormsg))
 
-@app.route('/lost')
-def lost():
-    return redirect(url_for('hangman'))
-
 @app.route('/hangman')
 def hangman():
     score = session['player_score'];
@@ -63,6 +59,7 @@ def gameEnd():
 
 @app.route('/lost')
 def gameLost():
+    score = session['player_score']
     game = Game()
     theme = game.getRandomTheme()
     hint = game.getHint(theme)
