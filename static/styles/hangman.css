@@ -36,6 +36,10 @@ button{
   padding-top: 2%;
 }
 
+.deadman, #height {
+  height : 100%;
+}
+
 a{
   color: #ffd215;
 }
