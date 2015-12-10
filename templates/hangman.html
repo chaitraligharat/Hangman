@@ -6,7 +6,19 @@
 		<link rel="stylesheet" href="../static/styles/default.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
+		<style type="text/css">
+			body{
+				background-image: url('../static/images/starry_night.jpg');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+			}
 
+
+		</style>
 		<script>
 			var word= '{{word}}';
 			var hint= '{{hint}}';
@@ -16,9 +28,10 @@
 	<body>
 
 		<header>
-			<div class="col-lg-9">
+			<div class="hangmanimage col-md-8">
+				<img src="../static/images/hangman.png" class="img-responsive"/>
 			</div>
-			<div id="details" class="col-lg-3">
+			<div id="details" class="col-md-4">
 				<ul>
 					<li><span>Username : </span><span id="username">{{session['player_name']}}</span></li>
 					<li><span>Score : </span><span id="score">{{ session['player_score'] }}</span></li>
@@ -28,61 +41,31 @@
 		</header>
 
 		<div class="container">
+			<div class="row">
+				<div class="deadman col-xs-12 col-lg-6">
+					<img src="../static/images/0.png" height=500px width=600px alt=""  id="hangman"/>
+					<!-- <canvas id="stickman"></canvas> -->
 
-			<div class="col-lg-6" id="deadman">
-				<canvas id="stickman"></canvas>
-				<div id="status"></div>
-			</div>
-
-			<div class="col-lg-6" id="gamearea">
-				<div id="time"></div>
-				<div class="row">
-					<span>Theme : </span><span>{{hint}}</span>
 				</div>
-				<div class="row" id="ans">
+				<div class="col-xs-12 col-lg-6">
+					<div class="row">
+						<div id="status">Go Blue!!!</div>
+					</div>
+					<div id="gamearea">
+						<div class="row">
+							<span>Theme : </span><span id="hint">{{hint}}</span>
+						</div>
+						<div class="row" id="ans">
+						</div>
+						<div class="row" id="alpha-container">
+						</div>
+						<div class="row" id="start-new-game"><button><a href="/hangman">Start a new  game</a></button></div>
+					</div>
 				</div>
-				<div class="row" id="alpha-container">
-				</div>
-				<div class="row" id="start-new-game"><button><a href="/hangman">Start a new  game</a></button></div>
 			</div>
 		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../static/scripts/hangman.js"></script>
-	<script type="text/javascript">
 
-	var c= document.getElementById("stickman");
-	var s = c.getContext("2d");
-	s.beginPath();
-
-	//Head
-	s.arc(120,50,25,0,2*Math.PI);
-
-	//Torso
-	s.moveTo(120,75);
-	s.lineTo(120,110);
-
-	//Right hand
-	s.moveTo(120,90);
-	s.lineTo(160,70);
-
-	//Left hand
-	s.moveTo(120,90);
-	s.lineTo(80,70);
-
-	//Right leg
-	s.moveTo(120,110);
-	s.lineTo(160,130);
-
-	//Left leg
-	s.moveTo(120,110);
-	s.lineTo(80,130);
-
-	s.lineWidth=5;
-	s.fillStyle = "#ffd215"
-	s.strokeStyle = "#ffd215";
-	s.stroke();
-	s.fill();
-
-	</script>
 </html>

@@ -9,106 +9,31 @@ var RIGHT_LEG = 6;
 var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 var deadStatus;
 var gameStatus;
-//
-// var game_timer =
-//   {
-//     timer:null,
-//     time_remaining:2
-//
-//     this.pauseTimer = function() {
-//       clearInterval(timer);
-//       console.log("Will redirect now");
-//     }
-//
-//     this.resetTimer = function() {
-//       time_remaining = 2;
-//     }
-//
-//     displayTimer = function(mm,ss) {
-//       $('#time').text(mm + " : "+ ss);
-//     }
-//
-//     runTimer = function() {
-//       var end = new Date();
-//       end.setMinutes(end.getMinutes() + time_remaining);
-//       var start = new Date();
-//
-//       timer = setInterval(function() {
-//         now = new Date();
-//         time_remaining = end - now;
-//
-//         if(time_remaining <= 0)
-//         {
-//           pauseTimer();
-//           console.log('Game ends');
-//           return;
-//         //  endGame();
-//         }
-//         var msec = time_remaining;
-//         var hh = Math.floor(msec / 1000 / 60 / 60);
-//         msec -= hh * 1000 * 60 * 60;
-//         var mm = Math.floor(msec / 1000 / 60);
-//         msec -= mm * 1000 * 60;
-//         var ss = Math.floor(msec / 1000);
-//         msec -= ss * 1000;
-//         displayTimer(mm,ss);
-//       },1000);
-//     }
-//   };
 
 var main = function() {
   prepareNewGame();
   //game_timer.runTimer();
 }
 
+$(document).bind("keyup",function(e){
+    var value = String.fromCharCode(e.keyCode);
+    if(65 <= e.keyCode && e.keyCode <=90)
+    {
+      checkAlpha($('#'+value));
+    }
+});
+
 function prepareNewGame()
 {
+  $('#hangman').attr('src','static/images/0.png');
   deadStatus = NONE;
   gameStatus = word.length;
   $('#deadman').show();
-  $('#status').hide();
-
+  $('#status').text('Go Blue!!!');
+  $('#gamearea').show();
   populateBlanks();
   populateAlphabets();
   $('#hint').text(hint);
-}
-
-function showDeadMan()
-{
-
-}
-//
-// function startTimer(limit)
-// {
-//     var end = new Date();
-//     end.setMinutes(end.getMinutes() + limit);
-//     var start = new Date();
-//
-//     timer = setInterval(function() {
-//       now = new Date();
-//       diff = end - now;
-//
-//       if(diff <= 0)
-//       {
-//         clearInterval(timer);
-//         console.log("Will redirect now");
-//       //  endGame();
-//       }
-//       var msec = diff;
-//       var hh = Math.floor(msec / 1000 / 60 / 60);
-//       msec -= hh * 1000 * 60 * 60;
-//       var mm = Math.floor(msec / 1000 / 60);
-//       msec -= mm * 1000 * 60;
-//       var ss = Math.floor(msec / 1000);
-//       msec -= ss * 1000;
-//
-//       $('#time').text(mm + " : "+ ss);
-//     },1000);
-// }
-
-function endGame()
-{
-  window.location.replace('/gameEnd');
 }
 
 function populateAlphabets()
@@ -120,7 +45,11 @@ function populateAlphabets()
     var alpha = createAlphabet(alphabet[i]);
     alphaContainer.append(alpha);
     alphaContainer.append('&nbsp;');
+    if(i == 6 || i == 13 || i== 20){
+      alphaContainer.append('<br><br><br>');
+    }
   }
+  alphaContainer.show();
 }
 
 function createAlphabet(alphabet)
@@ -129,6 +58,7 @@ function createAlphabet(alphabet)
   element.text(alphabet);
   element.addClass('alphabet');
   element.attr('href','#');
+  element.attr('id',alphabet);
   element.attr('onclick','checkAlpha(this)');
   return element;
 }
@@ -174,8 +104,6 @@ function updateProgress(found)
   gameStatus = gameStatus - found;
   if(gameStatus == 0)
   {
-    $('#deadman').hide();
-    $('#status').text("You Won!!!!");
     //game won code;
     gameWon();
   }
@@ -183,13 +111,23 @@ function updateProgress(found)
 
 function gameWon()
 {
-  getNewGame('/won')
+  $('#gamearea').hide();
+
+  var seconds_left = 3;
+  showStatus('You Won :D Next game will start in....'+ seconds_left + ' seconds');
+  var interval = setInterval(function() {
+    showStatus('You Won :D Next game will start in....'+ --seconds_left + ' seconds');
+    if (seconds_left <= 0)
+    {
+       getNewGame('/won');
+       clearInterval(interval);
+    }
+  }, 1000);
 }
 
 function getNewGame(url)
 {
   $.getJSON($SCRIPT_ROOT + url, {
-        word: getSolvedWord()
       },
       function(data) {
       //  game_timer.runTimer();
@@ -201,19 +139,12 @@ function getNewGame(url)
       return false;
 }
 
-function getSolvedWord()
-{
-  return 'abc';
-}
-
 function hangman()
 {
   drawNext(++deadStatus);
   //if the status is right leg, the game is lost
   if (deadStatus == RIGHT_LEG)
   {
-    $('#deadman').hide();
-    $('#status').text("You Lost!!!!");
     //code for game lost
     return gameLost();
   }
@@ -221,8 +152,26 @@ function hangman()
 
 function gameLost()
 {
-  disableAllAlphabets();
-  return getNewGame('/lost');
+  drawNext(++deadStatus);
+
+  $('#gamearea').hide();
+
+  var seconds_left = 3;
+  showStatus('You Lost :( Next game will start in....'+ seconds_left + ' seconds');
+  var interval = setInterval(function() {
+    showStatus('You Lost :( Next game will start in....'+ --seconds_left + ' seconds');
+    if (seconds_left <= 0)
+    {
+       getNewGame('/lost');
+       clearInterval(interval);
+    }
+  }, 1000);
+}
+
+function showStatus(message)
+{
+  $('#status').text(message);
+  $('#status').show();
 }
 
 function disableAllAlphabets()
@@ -232,8 +181,7 @@ function disableAllAlphabets()
 
 function drawNext(deadStatus)
 {
-  $('#status').text(deadStatus);
-  $('#status').show();
+  $('#hangman').attr("src","static/images/" + deadStatus + ".png");
 }
 
 function populateBlanks()

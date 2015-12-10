@@ -28,7 +28,10 @@ def submitCheckin():
 
 @app.route('/hangman')
 def hangman():
-    score = session['player_score'];
+    try:
+        score = session['player_score']
+    except Exception as e:
+        return redirect(url_for('index'))
     game = Game();
     theme = game.getRandomTheme();
     hint = game.getHint(theme);
