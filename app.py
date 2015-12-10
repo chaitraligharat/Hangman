@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, escape, request
+from flask import Flask, render_template, session, redirect, url_for, escape, request, jsonify
 from core import Player, Game
 from forms import LoginForm
 app = Flask(__name__)		#Initialize application
@@ -21,17 +21,53 @@ def checkin():
 def submitCheckin():
     if request.method == 'POST':
         player = Player(request.form['username'])
-        game = Game();
         session['player_name'] = player.name
         session['player_score'] = player.score
-        session['word'] = game.getWord()
         return redirect(url_for('hangman'))
-    error = 'Could not check in'
     return redirect(url_for('index',error=errormsg))
 
 @app.route('/hangman')
 def hangman():
-    return render_template("hangman.html")
+    try:
+        score = session['player_score']
+    except Exception as e:
+        return redirect(url_for('index'))
+    game = Game();
+    theme = game.getRandomTheme();
+    hint = game.getHint(theme);
+    word = game.getWord(theme);
+    return render_template("hangman.html",hint=hint, word=word, score=score)
+
+@app.route('/logout')
+def logout():
+    session.pop('player_name', None)
+    session.pop('player_score', None)
+    return redirect(url_for('index'))
+
+@app.route('/won')
+def gameWon():
+    score = session['player_score'] + 1
+    session['player_score'] = score
+    game = Game()
+    theme = game.getRandomTheme()
+    hint = game.getHint(theme)
+    word = game.getWord(theme)
+    return jsonify(hint=hint, word=word, score=score)
+
+@app.route('/gameEnd')
+def gameEnd():
+    score = session['player_score']
+    session['player_score'] = 0
+    return render_template('gameEnd.html',score=score)
+
+@app.route('/lost')
+def gameLost():
+    score = session['player_score']
+    game = Game()
+    theme = game.getRandomTheme()
+    hint = game.getHint(theme)
+    word = game.getWord(theme)
+    return jsonify(hint=hint, word=word, score=score)
 
 if __name__ == '__main__':	#Start the Development server
     app.run(debug=True)

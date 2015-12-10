@@ -7,23 +7,49 @@ var LEFT_LEG = 5;
 var RIGHT_LEG = 6;
 
 var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-var deadStatus = NONE;
-var gameStatus = word.length;
+var deadStatus;
+var gameStatus;
 
 var main = function() {
+  prepareNewGame();
+  //game_timer.runTimer();
+}
+
+$(document).bind("keyup",function(e){
+    var value = String.fromCharCode(e.keyCode);
+    if(65 <= e.keyCode && e.keyCode <=90)
+    {
+      checkAlpha($('#'+value));
+    }
+});
+
+function prepareNewGame()
+{
+  $('#hangman').attr('src','static/images/0.png');
+  deadStatus = NONE;
+  gameStatus = word.length;
+  $('#deadman').show();
+  $('#status').text('Go Blue!!!');
+  $('#gamearea').show();
   populateBlanks();
   populateAlphabets();
+  $('#hint').text(hint);
 }
 
 function populateAlphabets()
 {
-  var alphaContainer = $('#alpha-container')
+  var alphaContainer = $('#alpha-container');
+  alphaContainer.empty();
   for (var i=0; i<alphabet.length; i++)
   {
     var alpha = createAlphabet(alphabet[i]);
     alphaContainer.append(alpha);
     alphaContainer.append('&nbsp;');
+    if(i == 6 || i == 13 || i== 20){
+      alphaContainer.append('<br><br><br>');
+    }
   }
+  alphaContainer.show();
 }
 
 function createAlphabet(alphabet)
@@ -32,6 +58,7 @@ function createAlphabet(alphabet)
   element.text(alphabet);
   element.addClass('alphabet');
   element.attr('href','#');
+  element.attr('id',alphabet);
   element.attr('onclick','checkAlpha(this)');
   return element;
 }
@@ -44,6 +71,9 @@ function checkAlpha(alphabet){
     return;
   }
 
+  //disable link
+  $(alphabet).addClass("disabled");
+
   //link is not disabled. Check if the alphabet is present in the word.
   var letter = $(alphabet).text();
 
@@ -52,13 +82,11 @@ function checkAlpha(alphabet){
   var found = 0;
   if(index == -1)
   {
-    hangman();
+    return hangman();
   }
 
   while (index != -1)
   {
-    console.log($('#blank'+index));
-
     //word contains the letter. Change the innerHTML of the blank to letter.
     $('#blank'+index).text(letter);
 
@@ -68,9 +96,6 @@ function checkAlpha(alphabet){
     found++;
   }
 
-  //disable link
-  $(alphabet).addClass("disabled");
-
   updateProgress(found);
 }
 
@@ -79,8 +104,6 @@ function updateProgress(found)
   gameStatus = gameStatus - found;
   if(gameStatus == 0)
   {
-    $('#deadman').text("You Won!!!!");
-    console.log("You won!");
     //game won code;
     gameWon();
   }
@@ -88,8 +111,32 @@ function updateProgress(found)
 
 function gameWon()
 {
-  var score = parseInt($('#score').text()) + 1;
-  $('#score').text(score);
+  $('#gamearea').hide();
+
+  var seconds_left = 3;
+  showStatus('You Won :D Next game will start in....'+ seconds_left + ' seconds');
+  var interval = setInterval(function() {
+    showStatus('You Won :D Next game will start in....'+ --seconds_left + ' seconds');
+    if (seconds_left <= 0)
+    {
+       getNewGame('/won');
+       clearInterval(interval);
+    }
+  }, 1000);
+}
+
+function getNewGame(url)
+{
+  $.getJSON($SCRIPT_ROOT + url, {
+      },
+      function(data) {
+      //  game_timer.runTimer();
+        word = data.word;
+        hint = data.hint;
+        $('#score').text(data.score);
+        prepareNewGame();
+      });
+      return false;
 }
 
 function hangman()
@@ -98,19 +145,48 @@ function hangman()
   //if the status is right leg, the game is lost
   if (deadStatus == RIGHT_LEG)
   {
-    console.log("You lost!!!");
     //code for game lost
+    return gameLost();
   }
+}
+
+function gameLost()
+{
+  drawNext(++deadStatus);
+
+  $('#gamearea').hide();
+
+  var seconds_left = 3;
+  showStatus('You Lost :( Next game will start in....'+ seconds_left + ' seconds');
+  var interval = setInterval(function() {
+    showStatus('You Lost :( Next game will start in....'+ --seconds_left + ' seconds');
+    if (seconds_left <= 0)
+    {
+       getNewGame('/lost');
+       clearInterval(interval);
+    }
+  }, 1000);
+}
+
+function showStatus(message)
+{
+  $('#status').text(message);
+  $('#status').show();
+}
+
+function disableAllAlphabets()
+{
+  $('.alphabet').addClass("disabled");
 }
 
 function drawNext(deadStatus)
 {
-  console.log("Drawing the next body part" + deadStatus);
-  $('#deadman').text(deadStatus);
+  $('#hangman').attr("src","static/images/" + deadStatus + ".png");
 }
 
 function populateBlanks()
 {
+  $('#ans').empty();
   for(var i=0;i<word.length;i++)
   {
     var element = $('<span>');

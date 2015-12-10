@@ -6,28 +6,66 @@
 		<link rel="stylesheet" href="../static/styles/default.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
+		<style type="text/css">
+			body{
+				background-image: url('../static/images/starry_night.jpg');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+			}
+
+
+		</style>
 		<script>
-		var word= '{{session['word']}}';
+			var word= '{{word}}';
+			var hint= '{{hint}}';
+			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 		</script>
 	</head>
 	<body>
+
 		<header>
-			<div>M</div>
-			<div>Michigan Hangman</div>
-			<span>{{session['player_name']}}</span>
-			<span>Score : </span><span id="score">{{ session['player_score'] }}</span>
+			<div class="hangmanimage col-md-8">
+				<img src="../static/images/hangman.png" class="img-responsive"/>
+			</div>
+			<div id="details" class="col-md-4">
+				<ul>
+					<li><span>Username : </span><span id="username">{{session['player_name']}}</span></li>
+					<li><span>Score : </span><span id="score">{{ session['player_score'] }}</span></li>
+					<li><button id="logout"><a href="/logout">Logout</a></span></li>
+				</ul>
+			</div>
 		</header>
-		<section>
-			<div id="hint">This keeps doctor away!</div>
-			<div id="deadman">
-				hangman picture
+
+		<div class="container">
+			<div class="row">
+				<div class="deadman col-xs-12 col-lg-6">
+					<img src="../static/images/0.png" height=500px width=600px alt=""  id="hangman"/>
+					<!-- <canvas id="stickman"></canvas> -->
+
+				</div>
+				<div class="col-xs-12 col-lg-6">
+					<div class="row">
+						<div id="status">Go Blue!!!</div>
+					</div>
+					<div id="gamearea">
+						<div class="row">
+							<span>Theme : </span><span id="hint">{{hint}}</span>
+						</div>
+						<div class="row" id="ans">
+						</div>
+						<div class="row" id="alpha-container">
+						</div>
+						<div class="row" id="start-new-game"><button><a href="/hangman">Start a new  game</a></button></div>
+					</div>
+				</div>
 			</div>
-			<div id="ans">
-			</div>
-			<div id="alpha-container">
-			</div>
-		</section>
+		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../static/scripts/hangman.js"></script>
+
 </html>

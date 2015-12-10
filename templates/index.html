@@ -6,25 +6,84 @@
 		<link rel="stylesheet" href="../static/styles/default.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="../static/styles/hangman.css">
+
+		<style type="text/css">
+			body{
+				background-image: url('../static/images/Hangman-19.png');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+			}
+			.container{
+				text-align: center;
+			}
+			input{
+				border: 1px solid #ffd215;
+				background-color: transparent;
+				margin-top: 1%;
+				margin-bottom: 1%;
+				color: white;
+				font-size: 16px;
+				font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+			}
+
+			form label{
+				color: white;
+				font-size: 18px;
+				font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+			}
+			header{
+				text-align: center;
+			}
+			h1{
+				font-size: 100px;
+				font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+				color: #ffd215;
+			}
+			#submit{
+				color: #00274c;
+				font-weight: bold;
+				background-color: #ffd215;
+				border: 1px solid #ffd215;
+				padding-top: 0.4%;
+				padding-bottom: 0.4%;
+				padding-right: 1.5%;
+				padding-left: 1.5%;
+			}
+			#submit:hover{
+				background-color: #FFFF00;
+			}
+			form{
+				margin-top: 10%;
+			}
+
+		</style>
 	</head>
 	<body>
 		<header>
-			<div>M</div>
-			<div>Michigan Hangman</div>
+			<div class="hangmanimage col-xs-12">
+				<img src="../static/images/hangman.png" class="img-responsive"/>
+			</div>
 		</header>
-		<section>
-			<form action="/submitCheckin" method="POST">
-				<div>
-					<label>Unique Name</label>
-				</div>
-				<div id="loginid">
-					{{ form.username.label }}
-    			{{ form.username }}
-				</div>
-				{{ form.submit }}
-			</form>
-		</section>
+		<div class="container col-xs-12">
+			<div class="col-xs-12">
+					<form action="/submitCheckin" method="POST">
+						<ul>
+						<li>
+							{{ form.username.label }}
+						</li>
+						<li id="loginid">
+							{{ form.username }}
+						</li>
+						<li>{{ form.submit }}</li>
+						</ul>
+					</form>
+			</div>
+		</div>
   </body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="../static/scripts/hangman.js"></script>
+	<!-- <script src="../static/scripts/hangman.js"></script> -->
 </html>

@@ -1,7 +1,99 @@
+.container{
+  padding-left: 0%;
+  margin-left: 0%;
+}
+
+#status {
+  color: #ffd215;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  font-size: 24px;
+  text-align: right;
+}
+
+span{
+  color: white;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  /*font-weight: bold;*/
+  font-size: 16px;
+}
+#username, #score{
+  color: #ffd215;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  font-size: 16px;
+}
+button{
+  background-color: transparent;
+  border: 2px solid #ffd215;
+  font-size: 16px;
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 0.8%;
+  padding-bottom: 0.8%;
+}
+.hangmanimage{
+  padding-left: 2%;
+  padding-top: 2%;
+}
+
+.deadman, #height {
+  height : 100%;
+}
+
+a{
+  color: #ffd215;
+}
+#details{
+  padding-top: 2%;
+  text-align: right;
+  padding-right: 4%;
+  /*padding-right: 2%;*/
+}
+
+canvas{
+    height: 300px;
+    width: 400px;
+  }
+
+  #gamearea{
+    text-align: right;
+    margin-top: 2%;
+}
+.deadman{
+  margin-top: 0%;
+  margin-left: 0%;
+  padding-left: 0%;
+}
+  li{
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+  .row{
+    padding-top: 4%;
+  }
+
+  .alphabet{
+    color: black;
+    background-color: #ffd215;
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+    font-weight: bold;
+    padding: 2%;
+    text-decoration:none;
+  }
+
 .disabled {
   pointer-events: none;
   cursor: default;
-  color: grey;
+  color: #717171;
+  background-color: #2a2a2a;
   text-decoration:none;
-  text-decoration: line-through;
+}
+
+a:focus {
+  text-decoration: none;
+  color: inherit;
+}
+
+#start-new-game {
+  display : none;
 }
